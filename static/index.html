@@ -9,13 +9,32 @@
       font-family: sans-serif;
       direction: rtl;
       background-color: #f9f9f9;
+      margin: 0;
+      display: flex;
+    }
+    aside {
+      width: 220px;
+      background-color: #ffffff;
+      padding: 15px;
+      border-left: 1px solid #ddd;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      height: 100vh;
+      overflow-y: auto;
+      position: sticky;
+      top: 0;
+    }
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
     header {
       background-color: #ffffff;
       padding: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       position: sticky;
       top: 0;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 10;
     }
     .search-container {
       display: flex;
@@ -65,47 +84,75 @@
       border-radius: 5px;
       margin-left: 5px;
     }
+    .scholar-list h3 {
+      margin-top: 0;
+    }
+    .scholar-list ul {
+      list-style: none;
+      padding: 0;
+    }
+    .scholar-list li {
+      margin-bottom: 8px;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <div class="search-container">
-      <input type="text" id="search" placeholder="اكتب سؤالًا...">
-      <button class="filter-toggle" onclick="toggleFilters()">⚙️ فلتر</button>
+
+  <aside>
+    <div class="scholar-list">
+      <h3>قائمة العلماء</h3>
+      <ul>
+        <li>ابن باز</li>
+        <li>العثيمين</li>
+        <li>الفوزان</li>
+        <li>عبد السلام الشويعر</li>
+        <li>عزيز فرحان العنزي</li>
+      </ul>
     </div>
-    <div class="filters" id="filterBox">
-      <select id="scholar">
-        <option value="all">كل العلماء</option>
-        <option value="ابن باز">ابن باز</option>
-        <option value="العثيمين">العثيمين</option>
-        <option value="الفوزان">الفوزان</option>
-      </select>
-      <select id="type">
-        <option value="all">الكل</option>
-        <option value="text">نص</option>
-        <option value="audio">صوت</option>
-        <option value="video">فيديو</option>
-      </select>
+  </aside>
+
+  <main>
+    <header>
+      <div class="search-container">
+        <input type="text" id="search" placeholder="اكتب سؤالًا...">
+        <button class="filter-toggle" onclick="toggleFilters()">⚙️ فلتر</button>
+      </div>
+      <div class="filters" id="filterBox">
+        <select id="scholar">
+          <option value="all">كل العلماء</option>
+          <option value="ابن باز">ابن باز</option>
+          <option value="العثيمين">العثيمين</option>
+          <option value="الفوزان">الفوزان</option>
+          <option value="عبد السلام الشويعر">عبد السلام الشويعر</option>
+          <option value="عزيز فرحان العنزي">عزيز فرحان العنزي</option>
+        </select>
+        <select id="type">
+          <option value="all">الكل</option>
+          <option value="text">نص</option>
+          <option value="audio">صوت</option>
+          <option value="video">فيديو</option>
+        </select>
+      </div>
+    </header>
+
+    <div class="suggestions">
+      <h4>مقترحات:</h4>
+      <ul>
+        <li>حكم الصلاة في العمل</li>
+        <li>حكم ترك الزكاة</li>
+      </ul>
     </div>
-  </header>
 
-  <div class="suggestions">
-    <h4>مقترحات:</h4>
-    <ul>
-      <li>حكم الصلاة في العمل</li>
-      <li>حكم ترك الزكاة</li>
-    </ul>
-  </div>
+    <div class="azkar">
+      <h4>أذكار:</h4>
+      <ul>
+        <li>سبحان الله وبحمده</li>
+        <li>لا إله إلا الله</li>
+      </ul>
+    </div>
 
-  <div class="azkar">
-    <h4>أذكار:</h4>
-    <ul>
-      <li>سبحان الله وبحمده</li>
-      <li>لا إله إلا الله</li>
-    </ul>
-  </div>
-
-  <div id="results"></div>
+    <div id="results"></div>
+  </main>
 
   <script>
     function toggleFilters() {
