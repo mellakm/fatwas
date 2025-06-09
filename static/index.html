@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>فتاوى العلماء</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: sans-serif;
+      direction: rtl;
+      background-color: #f9f9f9;
+    }
+    header {
+      background-color: #ffffff;
+      padding: 15px;
+      position: sticky;
+      top: 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .search-container {
+      display: flex;
+      gap: 10px;
+    }
+    input[type="text"] {
+      flex: 1;
+      padding: 8px;
+      font-size: 16px;
+      border-radius: 8px;
+    }
+    button.filter-toggle {
+      padding: 8px 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+    }
+    .filters {
+      display: none;
+      margin-top: 10px;
+      background-color: #f1f1f1;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    select {
+      padding: 5px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    .suggestions, .azkar {
+      padding: 15px;
+      background-color: white;
+      margin: 10px;
+      border-radius: 10px;
+    }
+    .result {
+      background-color: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 10px;
+    }
+    .badge {
+      background: #eee;
+      padding: 2px 6px;
+      font-size: 12px;
+      border-radius: 5px;
+      margin-left: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="search-container">
+      <input type="text" id="search" placeholder="اكتب سؤالًا...">
+      <button class="filter-toggle" onclick="toggleFilters()">⚙️ فلتر</button>
+    </div>
+    <div class="filters" id="filterBox">
+      <select id="scholar">
+        <option value="all">كل العلماء</option>
+        <option value="ابن باز">ابن باز</option>
+        <option value="العثيمين">العثيمين</option>
+        <option value="الفوزان">الفوزان</option>
+      </select>
+      <select id="type">
+        <option value="all">الكل</option>
+        <option value="text">نص</option>
+        <option value="audio">صوت</option>
+        <option value="video">فيديو</option>
+      </select>
+    </div>
+  </header>
+
+  <div class="suggestions">
+    <h4>مقترحات:</h4>
+    <ul>
+      <li>حكم الصلاة في العمل</li>
+      <li>حكم ترك الزكاة</li>
+    </ul>
+  </div>
+
+  <div class="azkar">
+    <h4>أذكار:</h4>
+    <ul>
+      <li>سبحان الله وبحمده</li>
+      <li>لا إله إلا الله</li>
+    </ul>
+  </div>
+
+  <div id="results"></div>
+
+  <script>
+    function toggleFilters() {
+      const box = document.getElementById("filterBox");
+      box.style.display = box.style.display === "none" || box.style.display === "" ? "block" : "none";
+    }
+
+    async function renderResults() {
+      const search = document.getElementById("search").value;
+      const scholar = document.getElementById("scholar").value;
+      const type = document.getElementById("type").value;
+
+      const params = new URLSearchParams({ query: search, scholar, type });
+      const res = await fetch(`/api/fatawa?${params.toString()}`);
+      const data = await res.json();
+
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = "";
+      data.forEach(item => {
+        resultsDiv.innerHTML += `
+          <div class="result">
+            <h3>${item.question} <span class="badge">${item.scholar}</span> <span class="badge">${item.type}</span></h3>
+            <p>${item.answer}</p>
+          </div>
+        `;
+      });
+    }
+
+    document.getElementById("search").addEventListener("input", renderResults);
+    document.getElementById("scholar").addEventListener("change", renderResults);
+    document.getElementById("type").addEventListener("change", renderResults);
+
+    renderResults();
+  </script>
+</body>
+</html>
